@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <random>
+#include <fstream> // Para manipular arquivos
+using namespace std;
+
+// Função que gera N valores aleatórios e retorna um vetor
+vector<int> gerarValoresAleatorios(int quantidade, int min, int max) {
+    random_device rd;          
+    mt19937 gen(rd());         
+    uniform_int_distribution<> dist(min, max);
+
+    vector<int> numeros;
+
+    for (int i = 0; i < quantidade; ++i) {
+        int valor = dist(gen);
+        numeros.push_back(valor);
+    }
+
+    return numeros;
+}
+
+// Função que salva o vetor em um arquivo de texto
+void salvarEmArquivo(const vector<int>& numeros, const string& nomeArquivo) {
+    ofstream arquivo(nomeArquivo); // Cria e abre o arquivo
+    if (!arquivo) {
+        cerr << "Erro ao abrir o arquivo para escrita!" << endl;
+        return;
+    }
+
+    for (int valor : numeros) {
+        arquivo << valor << "\n"; // Escreve cada valor em uma linha
+    }
+
+    arquivo.close();
+    cout << "✅ Valores salvos com sucesso em: " << nomeArquivo << endl;
+}
+
+int main() {
+    int n;
+    cout << "Quantos valores deseja gerar? ";
+    cin >> n;
+
+    // Gera os valores e guarda em um vetor
+    vector<int> aleatorios = gerarValoresAleatorios(n, 1, 100);
+
+    // Mostra os valores gerados
+    cout << "\nValores gerados:\n";
+    for (int valor : aleatorios)
+        cout << valor << " ";
+
+    cout << endl;
+
+    // Salva os valores em um arquivo
+    salvarEmArquivo(aleatorios, "valores.txt");
+
+    return 0;
+}
